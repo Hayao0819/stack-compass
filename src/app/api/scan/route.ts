@@ -4,7 +4,7 @@ import { Octokit } from "@octokit/rest";
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export async function GET(req: NextRequest, _: NextResponse) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const owner = searchParams.get("owner");
   const repo = searchParams.get("repo");
