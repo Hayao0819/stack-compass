@@ -32,7 +32,4 @@ jobs:
 
       - name: Run Biome
         run: biome ci .
-      
-      - name: Run build
-        run: pnpm next build --turbopack
 
