@@ -13,7 +13,7 @@ export default function Home() {
             あなたのリポジトリを分析し、使用している技術スタックを検出して、
             他の開発者が技術選定の参考にできるプラットフォームです。
           </p>
-          
+
           <div className="space-y-4">
             <Link
               href="/auth"
@@ -21,7 +21,7 @@ export default function Home() {
             >
               GitHubでログイン
             </Link>
-            
+
             <div className="mt-8">
               <Link
                 href="/repositories"
@@ -40,14 +40,14 @@ export default function Home() {
               package.json を分析してNext.jsプロジェクトを自動検出
             </p>
           </div>
-          
+
           <div className="bg-[#2D3748] p-6 rounded-lg">
             <h3 className="text-lg font-semibold mb-3">📊 簡単登録</h3>
             <p className="text-[#A0AEC0]">
               検出結果をワンクリックでプラットフォームに登録
             </p>
           </div>
-          
+
           <div className="bg-[#2D3748] p-6 rounded-lg">
             <h3 className="text-lg font-semibold mb-3">💡 技術選定支援</h3>
             <p className="text-[#A0AEC0]">

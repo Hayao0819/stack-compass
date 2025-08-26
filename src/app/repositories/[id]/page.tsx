@@ -172,7 +172,7 @@ export default async function RepositoryDetailPage({
                           {version}
                         </span>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </div>

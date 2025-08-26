@@ -1,23 +1,27 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
+import Link from "next/link";
+import { useState } from "react";
 
-export default function RegisterProjectPage({ params }: { params: { id: string } }) {
+export default function RegisterProjectPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const [formData, setFormData] = useState({
-    reason: ""
-  })
+    reason: "",
+  });
 
   const repository = {
     name: "my-next-app",
     html_url: "https://github.com/user/my-next-app",
-    framework: "Next.js"
-  }
+    framework: "Next.js",
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("登録データ:", { ...repository, ...formData })
-  }
+    e.preventDefault();
+    console.log("登録データ:", { ...repository, ...formData });
+  };
 
   return (
     <div className="min-h-screen bg-[#1A202C] text-[#F7FAFC]">
@@ -25,7 +29,7 @@ export default function RegisterProjectPage({ params }: { params: { id: string }
         <div className="max-w-2xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">プロジェクトの登録</h1>
-            <Link 
+            <Link
               href="/repositories"
               className="text-[#4299E1] hover:underline"
             >
@@ -77,7 +81,9 @@ export default function RegisterProjectPage({ params }: { params: { id: string }
                 </label>
                 <textarea
                   value={formData.reason}
-                  onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, reason: e.target.value })
+                  }
                   rows={4}
                   placeholder="例：開発速度を重視し、SSRが必要だったため..."
                   className="w-full bg-[#2D3748] text-[#F7FAFC] px-4 py-2 rounded-lg border border-[#4A5568] focus:border-[#4299E1] focus:outline-none"
@@ -104,13 +110,20 @@ export default function RegisterProjectPage({ params }: { params: { id: string }
           <div className="mt-8 bg-[#2D3748] p-6 rounded-lg">
             <h3 className="text-lg font-semibold mb-3">💡 Tips</h3>
             <ul className="text-[#A0AEC0] space-y-2 text-sm">
-              <li>• 技術選定の理由を詳しく書くと、他の開発者にとって参考になります</li>
-              <li>• パフォーマンス、開発体験、チーム構成などの観点から記述してみてください</li>
-              <li>• 登録後は公開され、他のユーザーが閲覧できるようになります</li>
+              <li>
+                • 技術選定の理由を詳しく書くと、他の開発者にとって参考になります
+              </li>
+              <li>
+                •
+                パフォーマンス、開発体験、チーム構成などの観点から記述してみてください
+              </li>
+              <li>
+                • 登録後は公開され、他のユーザーが閲覧できるようになります
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
