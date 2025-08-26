@@ -54,10 +54,7 @@ export default async function RepositoryDetailPage({
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">{repository.name}</h1>
-            <Link
-              href="/repositories"
-              className="text-primary hover:underline"
-            >
+            <Link href="/repositories" className="text-primary hover:underline">
               ← リポジトリ一覧に戻る
             </Link>
           </div>
@@ -88,7 +85,9 @@ export default async function RepositoryDetailPage({
 
                 <div className="space-y-3">
                   <div>
-                    <span className="text-muted-foreground text-sm">フルネーム:</span>
+                    <span className="text-muted-foreground text-sm">
+                      フルネーム:
+                    </span>
                     <p className="font-mono">{repository.full_name}</p>
                   </div>
                   <div>
@@ -97,7 +96,9 @@ export default async function RepositoryDetailPage({
                   </div>
                   <div className="flex gap-6">
                     <div>
-                      <span className="text-muted-foreground text-sm">言語:</span>
+                      <span className="text-muted-foreground text-sm">
+                        言語:
+                      </span>
                       <p className="font-semibold">{repository.language}</p>
                     </div>
                     <div>
@@ -109,11 +110,15 @@ export default async function RepositoryDetailPage({
                       </p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground text-sm">Stars:</span>
+                      <span className="text-muted-foreground text-sm">
+                        Stars:
+                      </span>
                       <p className="font-semibold">⭐ {repository.stars}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground text-sm">Forks:</span>
+                      <span className="text-muted-foreground text-sm">
+                        Forks:
+                      </span>
                       <p className="font-semibold">🔀 {repository.forks}</p>
                     </div>
                   </div>
@@ -187,7 +192,10 @@ export default async function RepositoryDetailPage({
                     </div>
                   )}
 
-                  <button type="button" className="w-full border border-primary text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <button
+                    type="button"
+                    className="w-full border border-primary text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
                     類似プロジェクトを探す
                   </button>
                 </div>
@@ -198,15 +206,21 @@ export default async function RepositoryDetailPage({
                 <h3 className="text-lg font-semibold mb-4">📊 統計</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">作成日</span>
+                    <span className="text-muted-foreground text-sm">
+                      作成日
+                    </span>
                     <span className="text-sm">2024-01-01</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">最終更新</span>
+                    <span className="text-muted-foreground text-sm">
+                      最終更新
+                    </span>
                     <span className="text-sm">2024-01-20</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">サイズ</span>
+                    <span className="text-muted-foreground text-sm">
+                      サイズ
+                    </span>
                     <span className="text-sm">1.2 MB</span>
                   </div>
                 </div>
