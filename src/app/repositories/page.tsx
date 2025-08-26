@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function RepositoriesPage() {
   const [repositories] = useState([
@@ -72,7 +72,9 @@ export default function RepositoriesPage() {
                         ✅ {repo.framework}
                       </span>
                     ) : (
-                      <span className="text-destructive text-sm">❌ 非対応</span>
+                      <span className="text-destructive text-sm">
+                        ❌ 非対応
+                      </span>
                     )}
                   </div>
 
@@ -82,7 +84,9 @@ export default function RepositoriesPage() {
                     </p>
                   )}
 
-                  <p className="text-muted-foreground text-xs">{repo.full_name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {repo.full_name}
+                  </p>
                 </div>
 
                 {repo.isSupported && !repo.isLoading && (
