@@ -50,6 +50,7 @@ export async function GET(req: NextRequest, _: NextResponse) {
         f.path?.split("/").pop()?.toLowerCase() === "dockerfile",
     );
 
+    // biome-ignore lint/suspicious/noExplicitAny: 後で直すらしい
     let packageJson: any = null;
     let dockerContent: string | null = null;
 
