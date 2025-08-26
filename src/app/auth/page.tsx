@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LoginBtn from "@/components/LoginBtn";
 
 export default function AuthPage() {
@@ -24,13 +25,13 @@ export default function AuthPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-[#A0AEC0]">
               ログインすることで、
-              <a href="#" className="text-[#4299E1] hover:underline">
+              <Link href="/terms" className="text-[#4299E1] hover:underline">
                 利用規約
-              </a>
+              </Link>
               と
-              <a href="#" className="text-[#4299E1] hover:underline">
+              <Link href="/privacy" className="text-[#4299E1] hover:underline">
                 プライバシーポリシー
-              </a>
+              </Link>
               に同意したものとみなされます。
             </p>
           </div>
