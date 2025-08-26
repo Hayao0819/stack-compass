@@ -49,14 +49,14 @@ export default async function RepositoryDetailPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#1A202C] text-[#F7FAFC]">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">{repository.name}</h1>
             <Link
               href="/repositories"
-              className="text-[#4299E1] hover:underline"
+              className="text-primary hover:underline"
             >
               ← リポジトリ一覧に戻る
             </Link>
@@ -66,12 +66,12 @@ export default async function RepositoryDetailPage({
             {/* メイン情報 */}
             <div className="lg:col-span-2 space-y-6">
               {/* 基本情報 */}
-              <div className="bg-[#2D3748] p-6 rounded-lg">
+              <div className="bg-card p-6 rounded-lg border">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <h2 className="text-xl font-semibold">基本情報</h2>
                     {repository.isRegistered && (
-                      <span className="bg-[#48BB78] text-[#F7FAFC] px-2 py-1 rounded-full text-xs">
+                      <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs">
                         登録済み
                       </span>
                     )}
@@ -80,7 +80,7 @@ export default async function RepositoryDetailPage({
                     href={repository.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#4299E1] hover:underline flex items-center gap-2"
+                    className="text-primary hover:underline flex items-center gap-2"
                   >
                     <svg
                       className="w-4 h-4"
@@ -95,32 +95,32 @@ export default async function RepositoryDetailPage({
 
                 <div className="space-y-3">
                   <div>
-                    <span className="text-[#A0AEC0] text-sm">フルネーム:</span>
+                    <span className="text-muted-foreground text-sm">フルネーム:</span>
                     <p className="font-mono">{repository.full_name}</p>
                   </div>
                   <div>
-                    <span className="text-[#A0AEC0] text-sm">説明:</span>
+                    <span className="text-muted-foreground text-sm">説明:</span>
                     <p>{repository.description}</p>
                   </div>
                   <div className="flex gap-6">
                     <div>
-                      <span className="text-[#A0AEC0] text-sm">言語:</span>
+                      <span className="text-muted-foreground text-sm">言語:</span>
                       <p className="font-semibold">{repository.language}</p>
                     </div>
                     <div>
-                      <span className="text-[#A0AEC0] text-sm">
+                      <span className="text-muted-foreground text-sm">
                         フレームワーク:
                       </span>
-                      <p className="font-semibold text-[#48BB78]">
+                      <p className="font-semibold text-green-600">
                         {repository.framework}
                       </p>
                     </div>
                     <div>
-                      <span className="text-[#A0AEC0] text-sm">Stars:</span>
+                      <span className="text-muted-foreground text-sm">Stars:</span>
                       <p className="font-semibold">⭐ {repository.stars}</p>
                     </div>
                     <div>
-                      <span className="text-[#A0AEC0] text-sm">Forks:</span>
+                      <span className="text-muted-foreground text-sm">Forks:</span>
                       <p className="font-semibold">🔀 {repository.forks}</p>
                     </div>
                   </div>
@@ -129,25 +129,25 @@ export default async function RepositoryDetailPage({
 
               {/* フレームワーク選択理由 */}
               {repository.reason && (
-                <div className="bg-[#2D3748] p-6 rounded-lg">
+                <div className="bg-card p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold mb-3">
                     💡 なぜ{repository.framework}を選んだか
                   </h3>
-                  <p className="text-[#A0AEC0] leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed">
                     {repository.reason}
                   </p>
-                  <div className="mt-4 text-xs text-[#A0AEC0]">
+                  <div className="mt-4 text-xs text-muted-foreground">
                     登録日: {repository.registeredAt}
                   </div>
                 </div>
               )}
 
               {/* ファイル構造 */}
-              <div className="bg-[#2D3748] p-6 rounded-lg">
+              <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-lg font-semibold mb-3">
                   📁 プロジェクト構造
                 </h3>
-                <pre className="text-sm text-[#A0AEC0] font-mono overflow-x-auto">
+                <pre className="text-sm text-muted-foreground font-mono overflow-x-auto">
                   {repository.fileStructure.join("\n")}
                 </pre>
               </div>
@@ -156,7 +156,7 @@ export default async function RepositoryDetailPage({
             {/* サイドバー */}
             <div className="space-y-6">
               {/* 依存関係 */}
-              <div className="bg-[#2D3748] p-6 rounded-lg">
+              <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-lg font-semibold mb-4">
                   📦 主要な依存関係
                 </h3>
@@ -168,7 +168,7 @@ export default async function RepositoryDetailPage({
                         className="flex justify-between items-center py-1"
                       >
                         <span className="text-sm font-mono">{name}</span>
-                        <span className="text-xs text-[#A0AEC0] font-mono">
+                        <span className="text-xs text-muted-foreground font-mono">
                           {version}
                         </span>
                       </div>
@@ -178,42 +178,42 @@ export default async function RepositoryDetailPage({
               </div>
 
               {/* アクション */}
-              <div className="bg-[#2D3748] p-6 rounded-lg">
+              <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-lg font-semibold mb-4">⚙️ アクション</h3>
                 <div className="space-y-3">
                   {!repository.isRegistered ? (
                     <Link
                       href={`/repositories/${repository.id}/register`}
-                      className="block w-full bg-[#4299E1] text-[#F7FAFC] px-4 py-2 rounded-lg font-medium hover:bg-[#3182CE] transition-colors text-center"
+                      className="block w-full bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors text-center"
                     >
                       StackCompassに登録
                     </Link>
                   ) : (
-                    <div className="bg-[#48BB78] text-[#F7FAFC] px-4 py-2 rounded-lg text-center">
+                    <div className="bg-green-600 text-white px-4 py-2 rounded-lg text-center">
                       ✅ 登録済み
                     </div>
                   )}
 
-                  <button className="w-full border border-[#4299E1] text-[#4299E1] px-4 py-2 rounded-lg font-medium hover:bg-[#4299E1] hover:text-[#F7FAFC] transition-colors">
+                  <button className="w-full border border-primary text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
                     類似プロジェクトを探す
                   </button>
                 </div>
               </div>
 
               {/* 統計情報 */}
-              <div className="bg-[#2D3748] p-6 rounded-lg">
+              <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-lg font-semibold mb-4">📊 統計</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-[#A0AEC0] text-sm">作成日</span>
+                    <span className="text-muted-foreground text-sm">作成日</span>
                     <span className="text-sm">2024-01-01</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#A0AEC0] text-sm">最終更新</span>
+                    <span className="text-muted-foreground text-sm">最終更新</span>
                     <span className="text-sm">2024-01-20</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#A0AEC0] text-sm">サイズ</span>
+                    <span className="text-muted-foreground text-sm">サイズ</span>
                     <span className="text-sm">1.2 MB</span>
                   </div>
                 </div>
