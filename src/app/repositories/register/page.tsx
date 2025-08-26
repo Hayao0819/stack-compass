@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-export default function RegisterProjectPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function RegisterProjectPage(_: { params: { id: string } }) {
   const [formData, setFormData] = useState({
     reason: "",
   });
@@ -29,10 +25,7 @@ export default function RegisterProjectPage({
         <div className="max-w-2xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">プロジェクトの登録</h1>
-            <Link
-              href="/repositories"
-              className="text-primary hover:underline"
-            >
+            <Link href="/repositories" className="text-primary hover:underline">
               ← リポジトリ一覧に戻る
             </Link>
           </div>
@@ -42,52 +35,53 @@ export default function RegisterProjectPage({
               <div>
                 <label className="block text-sm font-medium mb-2">
                   リポジトリ名
+                  <input
+                    type="text"
+                    value={repository.name}
+                    disabled
+                    className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
+                  />
                 </label>
-                <input
-                  type="text"
-                  value={repository.name}
-                  disabled
-                  className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
-                />
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">
                   GitHub URL
+                  <input
+                    type="text"
+                    value={repository.html_url}
+                    disabled
+                    className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
+                  />
                 </label>
-                <input
-                  type="text"
-                  value={repository.html_url}
-                  disabled
-                  className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
-                />
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">
                   検出フレームワーク
+                  <input
+                    type="text"
+                    value={repository.framework}
+                    disabled
+                    className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
+                  />
                 </label>
-                <input
-                  type="text"
-                  value={repository.framework}
-                  disabled
-                  className="w-full bg-muted text-muted-foreground px-4 py-2 rounded-lg border-none"
-                />
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">
                   なぜこのフレームワークを選んだか（任意）
+                  <textarea
+                    id="reason"
+                    value={formData.reason}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reason: e.target.value })
+                    }
+                    rows={4}
+                    placeholder="例：開発速度を重視し、SSRが必要だったため..."
+                    className="w-full bg-background text-foreground px-4 py-2 rounded-lg border border-input focus:border-ring focus:outline-none"
+                  />
                 </label>
-                <textarea
-                  value={formData.reason}
-                  onChange={(e) =>
-                    setFormData({ ...formData, reason: e.target.value })
-                  }
-                  rows={4}
-                  placeholder="例：開発速度を重視し、SSRが必要だったため..."
-                  className="w-full bg-background text-foreground px-4 py-2 rounded-lg border border-input focus:border-ring focus:outline-none"
-                />
               </div>
 
               <div className="flex gap-4 pt-4">

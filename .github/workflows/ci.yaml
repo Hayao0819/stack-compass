@@ -1,0 +1,35 @@
+name: Code quality
+
+on:
+  push:
+  pull_request:
+
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v5
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: "2.2.0"
+
+      - name: Run Biome
+        run: biome ci .
+
