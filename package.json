@@ -10,8 +10,11 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.1",
+    "drizzle-orm": "^0.44.5",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",
     "next-auth": "5.0.0-beta.29",
@@ -25,7 +28,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.4",
     "tailwindcss": "^4",
+    "tsx": "^4.20.5",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5"
   },

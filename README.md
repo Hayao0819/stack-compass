@@ -6,3 +6,11 @@ VoltaでNodeを入れてください
 volta install corepack
 pnpm install
 ```
+
+## データベース
+
+### マイグレーション
+
+```bash
+pnpm drizzle-kit migrate
+```
