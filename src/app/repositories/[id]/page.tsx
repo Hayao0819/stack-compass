@@ -1,4 +1,11 @@
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"; 
+import { Button } from "@/components/ui/button";
 
 export default async function RepositoryDetailPage({
   params,
@@ -63,168 +70,190 @@ export default async function RepositoryDetailPage({
             {/* メイン情報 */}
             <div className="lg:col-span-2 space-y-6">
               {/* 基本情報 */}
-              <div className="bg-card p-6 rounded-lg border">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-xl font-semibold">基本情報</h2>
-                    {repository.isRegistered && (
-                      <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs">
-                        登録済み
-                      </span>
-                    )}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <CardTitle className="text-xl">基本情報</CardTitle>
+                      {repository.isRegistered && (
+                        <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs">
+                          登録済み
+                        </span>
+                      )}
+                    </div>
+                    <a
+                      href={repository.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline flex items-center gap-2"
+                    >
+                      GitHubで見る
+                    </a>
                   </div>
-                  <a
-                    href={repository.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline flex items-center gap-2"
-                  >
-                    GitHubで見る
-                  </a>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-muted-foreground text-sm">
-                      フルネーム:
-                    </span>
-                    <p className="font-mono">{repository.full_name}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground text-sm">説明:</span>
-                    <p>{repository.description}</p>
-                  </div>
-                  <div className="flex gap-6">
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
                     <div>
                       <span className="text-muted-foreground text-sm">
-                        言語:
+                        フルネーム:
                       </span>
-                      <p className="font-semibold">{repository.language}</p>
+                      <p className="font-mono">{repository.full_name}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground text-sm">
-                        フレームワーク:
-                      </span>
-                      <p className="font-semibold text-green-600">
-                        {repository.framework}
-                      </p>
+                      <span className="text-muted-foreground text-sm">説明:</span>
+                      <p>{repository.description}</p>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground text-sm">
-                        Stars:
-                      </span>
-                      <p className="font-semibold">⭐ {repository.stars}</p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground text-sm">
-                        Forks:
-                      </span>
-                      <p className="font-semibold">🔀 {repository.forks}</p>
+                    <div className="flex gap-6">
+                      <div>
+                        <span className="text-muted-foreground text-sm">
+                          言語:
+                        </span>
+                        <p className="font-semibold">{repository.language}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground text-sm">
+                          フレームワーク:
+                        </span>
+                        <p className="font-semibold text-green-600">
+                          {repository.framework}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground text-sm">
+                          Stars:
+                        </span>
+                        <p className="font-semibold">⭐ {repository.stars}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground text-sm">
+                          Forks:
+                        </span>
+                        <p className="font-semibold">🔀 {repository.forks}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* フレームワーク選択理由 */}
               {repository.reason && (
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-semibold mb-3">
-                    💡 なぜ{repository.framework}を選んだか
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {repository.reason}
-                  </p>
-                  <div className="mt-4 text-xs text-muted-foreground">
-                    登録日: {repository.registeredAt}
-                  </div>
-                </div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      💡 なぜ{repository.framework}を選んだか
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {repository.reason}
+                    </p>
+                    <div className="mt-4 text-xs text-muted-foreground">
+                      登録日: {repository.registeredAt}
+                    </div>
+                  </CardContent>
+                </Card>
               )}
 
               {/* ファイル構造 */}
-              <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-3">
-                  📁 プロジェクト構造
-                </h3>
-                <pre className="text-sm text-muted-foreground font-mono overflow-x-auto">
-                  {repository.fileStructure.join("\n")}
-                </pre>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    📁 プロジェクト構造
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <pre className="text-sm text-muted-foreground font-mono overflow-x-auto">
+                    {repository.fileStructure.join("\n")}
+                  </pre>
+                </CardContent>
+              </Card>
             </div>
 
             {/* サイドバー */}
             <div className="space-y-6">
               {/* 依存関係 */}
-              <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-4">
-                  📦 主要な依存関係
-                </h3>
-                <div className="space-y-2">
-                  {Object.entries(repository.dependencies).map(
-                    ([name, version]) => (
-                      <div
-                        key={name}
-                        className="flex justify-between items-center py-1"
-                      >
-                        <span className="text-sm font-mono">{name}</span>
-                        <span className="text-xs text-muted-foreground font-mono">
-                          {version}
-                        </span>
-                      </div>
-                    ),
-                  )}
-                </div>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    📦 主要な依存関係
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {Object.entries(repository.dependencies).map(
+                      ([name, version]) => (
+                        <div
+                          key={name}
+                          className="flex justify-between items-center py-1"
+                        >
+                          <span className="text-sm font-mono">{name}</span>
+                          <span className="text-xs text-muted-foreground font-mono">
+                            {version}
+                          </span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* アクション */}
-              <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-4">⚙️ アクション</h3>
-                <div className="space-y-3">
-                  {!repository.isRegistered ? (
-                    <Link
-                      href={`/repositories/${repository.id}/register`}
-                      className="block w-full bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors text-center"
-                    >
-                      StackCompassに登録
-                    </Link>
-                  ) : (
-                    <div className="bg-green-600 text-white px-4 py-2 rounded-lg text-center">
-                      ✅ 登録済み
-                    </div>
-                  )}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">⚙️ アクション</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {!repository.isRegistered ? (
+                      <Button asChild className="w-full">
+                        <Link href={`/repositories/${repository.id}/register`}>
+                          StackCompassに登録
+                        </Link>
+                      </Button>
+                    ) : (
+                      <div className="bg-green-600 text-white px-4 py-2 rounded-lg text-center">
+                        ✅ 登録済み
+                      </div>
+                    )}
 
-                  <button
-                    type="button"
-                    className="w-full border border-primary text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
-                  >
-                    類似プロジェクトを探す
-                  </button>
-                </div>
-              </div>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                    >
+                      類似プロジェクトを探す
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* 統計情報 */}
-              <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-4">📊 統計</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      作成日
-                    </span>
-                    <span className="text-sm">2024-01-01</span>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">📊 統計</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground text-sm">
+                        作成日
+                      </span>
+                      <span className="text-sm">2024-01-01</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground text-sm">
+                        最終更新
+                      </span>
+                      <span className="text-sm">2024-01-20</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground text-sm">
+                        サイズ
+                      </span>
+                      <span className="text-sm">1.2 MB</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      最終更新
-                    </span>
-                    <span className="text-sm">2024-01-20</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      サイズ
-                    </span>
-                    <span className="text-sm">1.2 MB</span>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
