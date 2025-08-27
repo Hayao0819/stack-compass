@@ -2,7 +2,9 @@ name: deploy to AppRun
 
 on:
   push:
-
+    tags:
+      - 'v*'
+      
 jobs:
   deploy:
     runs-on: ubuntu-latest
