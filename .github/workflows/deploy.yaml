@@ -16,7 +16,6 @@ jobs:
         with:
           use-repository-dockerfile: true
           app-dir: .
-          app-name: stack-compass
           sakura-api-key: ${{ secrets.SAKURA_API_TOKEN }}
           sakura-api-secret: ${{ secrets.SAKURA_API_SECRET }}
           container-registry: ${{ vars.CONTAINER_REGISTRY_URL }}
