@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // モックデータ - 検出結果
 const detectedLibraries = [

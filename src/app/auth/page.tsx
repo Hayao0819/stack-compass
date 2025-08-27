@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { LoginButton } from "./_components/LoginButton";
 
 export default async function AuthPage() {

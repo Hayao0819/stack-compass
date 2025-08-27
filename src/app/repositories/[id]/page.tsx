@@ -1,11 +1,6 @@
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"; 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function RepositoryDetailPage({
   params,
@@ -100,7 +95,9 @@ export default async function RepositoryDetailPage({
                       <p className="font-mono">{repository.full_name}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground text-sm">説明:</span>
+                      <span className="text-muted-foreground text-sm">
+                        説明:
+                      </span>
                       <p>{repository.description}</p>
                     </div>
                     <div className="flex gap-6">
@@ -157,9 +154,7 @@ export default async function RepositoryDetailPage({
               {/* ファイル構造 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">
-                    📁 プロジェクト構造
-                  </CardTitle>
+                  <CardTitle className="text-lg">📁 プロジェクト構造</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <pre className="text-sm text-muted-foreground font-mono overflow-x-auto">
@@ -174,9 +169,7 @@ export default async function RepositoryDetailPage({
               {/* 依存関係 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">
-                    📦 主要な依存関係
-                  </CardTitle>
+                  <CardTitle className="text-lg">📦 主要な依存関係</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
@@ -216,10 +209,7 @@ export default async function RepositoryDetailPage({
                       </div>
                     )}
 
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                    >
+                    <Button variant="outline" className="w-full">
                       類似プロジェクトを探す
                     </Button>
                   </div>

@@ -1,3 +1,4 @@
+import type { Session } from "next-auth";
 import { SignOutButton } from "@/components/SignOutButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { Session } from "next-auth";
 
 interface SignedInProps {
   session: Session;
@@ -72,7 +72,11 @@ export function SignedIn({ session }: SignedInProps) {
               <CardFooter>
                 <CardAction>
                   <Button variant="ghost">
-                    <a href="http://github.com/user/old-project" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href="http://github.com/user/old-project"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       GitHub で見る →
                     </a>
                   </Button>
