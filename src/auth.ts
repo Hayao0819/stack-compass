@@ -7,6 +7,7 @@ import type { JWT } from "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
