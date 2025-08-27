@@ -1,7 +1,15 @@
+import { auth } from "@/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { LoginButton } from "./_components/LoginButton";
 
-export default function AuthPage() {
+export default async function AuthPage() {
+  const session = await auth();
+
+  if (session?.user) {
+    redirect("/");
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
       <div className="max-w-md w-full mx-4">
