@@ -3,8 +3,8 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export const useGitHubToken = () => {
-  const sessin = useSession();
-  return sessin.data?.accessToken;
+  const session = useSession();
+  return session.data?.accessToken;
 };
 
 export const useOctokit = () => {
