@@ -1,15 +1,12 @@
-// app/api/detect/[user]/[reponame]/[branch]/route.ts
-
 import { Octokit } from "@octokit/rest";
-import type { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import toml from "toml";
 import { auth } from "@/auth";
 import { runDetectors } from "@/lib/detector";
 import type { ManifestContent } from "@/lib/detector/base";
 
 export async function GET(
-  _req: NextApiRequest,
+  _: NextRequest,
   {
     params,
   }: { params: Promise<{ user: string; reponame: string; branch?: string }> },
