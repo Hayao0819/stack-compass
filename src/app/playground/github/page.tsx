@@ -1,9 +1,7 @@
-"use client";
+import { getOctokit } from "@/lib/github/server";
 
-import { useGitHubAuthenticated } from "@/lib/github";
+export default async function GitHubAPITest() {
+  const octokit = await getOctokit();
 
-export default function GitHubAPITest() {
-  const me = useGitHubAuthenticated();
-
-  return JSON.stringify(me);
+  return JSON.stringify(await octokit?.rest.users.getAuthenticated());
 }
