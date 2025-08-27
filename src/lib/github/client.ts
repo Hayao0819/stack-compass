@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export const useGitHubToken = () => {
   const session = useSession();
@@ -15,16 +15,11 @@ export const useOctokit = () => {
   });
 };
 
-// TODO: Tanstack QueryかSWRを導入する
-export const useAsyncResult = <T>(f: () => Promise<T> | null | undefined) => {
-  const [data, setData] = useState<T | null>(null);
-  useEffect(() => {
-    f()?.then((d) => setData(d));
-  }, [f]);
-  return data;
-};
-
 export const useGitHubAuthenticated = () => {
   const client = useOctokit();
-  return useAsyncResult(() => client?.users.getAuthenticated());
+  // return useAsyncResult(() => client?.users.getAuthenticated());
+  const res = useSWR("github-authenticated", () =>
+    client?.rest.users.getAuthenticated(),
+  );
+  return res.data;
 };
