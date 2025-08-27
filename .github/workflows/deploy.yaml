@@ -1,0 +1,30 @@
+name: deploy to AppRun
+
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to AppRun
+        id: deploy
+        uses: ippanpeople/sacloud-apprun-action@v0.0.4
+        with:
+          use-repository-dockerfile: true
+          app-dir: .
+          sakura-api-key: ${{ secrets.SAKURA_API_TOKEN }}
+          sakura-api-secret: ${{ secrets.SAKURA_API_SECRET }}
+          container-registry: ${{ vars.CONTAINER_REGISTRY_URL }}
+          container-registry-user: ${{ vars.CONTAINER_REGISTRY_USERNAME }}
+          container-registry-password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+          port: '3000'
+          # SQLite + Litestream を使う場合は以下も指定
+          object-storage-bucket: ${{ vars.SAKURA_STORAGE_BUCKET_NAME }}
+          object-storage-access-key: ${{ secrets.SAKURA_STORAGE_KEYID }}
+          object-storage-secret-key: ${{ secrets.SAKURA_STORAGE_SECRET }}
+          sqlite-db-path: ./db/app.db
+          litestream-replicate-interval: 10s
