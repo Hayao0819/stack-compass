@@ -61,14 +61,14 @@ LITESTREAM_EOF
     fi
   fi
 
-  pnpm migrate
-
   echo "Starting Litestream with app integration..."
   sync
 
   cd /app
 
   corepack enable pnpm && pnpm install --frozen-lockfile
+  
+  pnpm migrate
   pnpm run build
 
   exec /usr/local/bin/litestream replicate -config /etc/litestream.yml -exec "node .next/standalone/server.js"
