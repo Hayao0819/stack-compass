@@ -20,6 +20,8 @@ import { Textarea } from "@/components/ui/textarea";
 import type { TechDetectResult } from "@/lib/detector/call";
 import { fetcher } from "@/lib/fetcher";
 import { registerRepository } from "./action";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CircleX } from "lucide-react";
 
 export const registerFormSchema = z.object({
   owner: z.string().max(500),
@@ -30,7 +32,7 @@ export const registerFormSchema = z.object({
     z.object({
       name: z.string().max(500),
       reason: z.string().max(1000),
-    }),
+    })
   ),
 });
 
@@ -53,7 +55,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
 
   const [isDetecting, setIsDetecting] = useState(false);
   const [detectionComplete, setDetectionComplete] = useState(false);
-  const [, setDetectingError] = useState<string | null>(null);
+  const [detectingError, setDetectingError] = useState<string | null>(null);
 
   const handleDetect = async () => {
     setDetectionComplete(false);
@@ -64,21 +66,23 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     try {
       const res = (await fetcher(
         `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo,
-        )}/${encodeURIComponent(branch)}`,
+          repo
+        )}/${encodeURIComponent(branch)}`
       )) as TechDetectResult;
-
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
-        })) ?? [],
+        })) ?? []
       );
     } catch (error) {
       if (error instanceof Error) {
         setDetectingError(error.message);
+      } else {
+        setDetectingError("Unknown Error")
       }
     }
+
     setIsDetecting(false);
     setDetectionComplete(true);
   };
@@ -176,8 +180,16 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                 </Card>
               )}
 
+              {detectingError && (
+                <Alert variant="destructive" className="mb-6">
+                  <CircleX />
+                  <AlertTitle>エラーが発生しました</AlertTitle>
+                  <AlertDescription>{detectingError}</AlertDescription>
+                </Alert>
+              )}
+
               {/* ステップ3: 検出結果とライブラリごとの選定理由 */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <Card className="mb-6">
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold">
@@ -190,7 +202,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                         key={tech.id}
                         control={form.control}
                         {...form.register(
-                          `libraryReasons.${techFields.indexOf(tech)}.reason`,
+                          `libraryReasons.${techFields.indexOf(tech)}.reason`
                         )}
                         render={({ field }) => (
                           <FormItem>
@@ -213,7 +225,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               )}
 
               {/* ステップ4: プロジェクト全体の選定方針 */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <Card className="mb-6">
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold">
@@ -245,7 +257,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               )}
 
               {/* 登録ボタン */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <div className="flex gap-4">
                   <Button
                     type="submit"
