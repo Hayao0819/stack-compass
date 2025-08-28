@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { TechDetectResult } from "@/lib/detector/call";
+import { fetchTechDetect, type TechDetectResult } from "@/lib/detector/call";
 import { fetcher } from "@/lib/fetcher";
 import { registerRepository } from "./action";
 
@@ -62,11 +62,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     const repo = form.getValues("repository");
     const branch = form.getValues("branch");
     try {
-      const res = (await fetcher(
-        `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo,
-        )}/${encodeURIComponent(branch)}`,
-      )) as TechDetectResult;
+      const res = (fetchTechDetect(owner,repo,branch)) as TechDetectResult;
 
       replaceTechField(
         res.detected?.map((tech) => ({
