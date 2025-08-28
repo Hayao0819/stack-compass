@@ -1,8 +1,12 @@
-import { Detector, ManifestContent } from "./base";
+import { Detector, type ManifestContent } from "./base";
 
 // ================= Web系 =================
 export class NextDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Next", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -17,7 +21,11 @@ export class NextDetector extends Detector {
 }
 
 export class ReactDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("React", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -32,7 +40,11 @@ export class ReactDetector extends Detector {
 }
 
 export class VueDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Vue", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -47,7 +59,11 @@ export class VueDetector extends Detector {
 }
 
 export class AngularDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Angular", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -62,7 +78,11 @@ export class AngularDetector extends Detector {
 }
 
 export class SvelteDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Svelte", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -77,7 +97,11 @@ export class SvelteDetector extends Detector {
 }
 
 export class ExpressDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Express", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -92,7 +116,11 @@ export class ExpressDetector extends Detector {
 }
 
 export class NestDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Nest", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -108,7 +136,11 @@ export class NestDetector extends Detector {
 
 // ================= Python系 =================
 export class DjangoDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Django", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -126,7 +158,11 @@ export class DjangoDetector extends Detector {
 }
 
 export class FlaskDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Flask", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -145,7 +181,11 @@ export class FlaskDetector extends Detector {
 
 // ================= Java系 =================
 export class SpringDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Spring", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -164,7 +204,11 @@ export class SpringDetector extends Detector {
 
 // ================= PHP系 =================
 export class LaravelDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Laravel", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -180,7 +224,11 @@ export class LaravelDetector extends Detector {
 
 // ================= Rust/Go系 =================
 export class GoDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Go", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -196,7 +244,11 @@ export class GoDetector extends Detector {
 }
 
 export class RustDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Rust", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -215,7 +267,11 @@ export class RustDetector extends Detector {
 
 // ================= Infrastructure / Ops =================
 export class DockerDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Docker", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -235,7 +291,11 @@ export class DockerDetector extends Detector {
 }
 
 export class DockerComposeDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("DockerCompose", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -253,7 +313,11 @@ export class DockerComposeDetector extends Detector {
 }
 
 export class KubernetesDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Kubernetes", files, manifests, langs);
   }
   detectByFiles(): boolean {
@@ -275,7 +339,11 @@ export class KubernetesDetector extends Detector {
 }
 
 export class TerraformDetector extends Detector {
-  constructor(files: string[], manifests: Record<string, ManifestContent> = {}, langs: string[] = []) {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
     super("Terraform", files, manifests, langs);
   }
   detectByFiles(): boolean {
