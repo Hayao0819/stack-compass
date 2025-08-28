@@ -5,7 +5,6 @@ export const repositories = sqliteTable("repositories", {
   name: text("name").notNull(),
   url: text("url").notNull(),
   description: text("description").notNull(),
-  libraries: text("libraries").notNull(),
 
   createdAt: int("created_at").$defaultFn(() => Date.now()),
   updatedAt: int("updated_at")

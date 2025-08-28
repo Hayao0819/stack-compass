@@ -1,45 +1,117 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { libraries, repositories } from "@/db/schema";
+import { db } from "@/index";
+import type { TechDetectResult } from "@/lib/detector/call";
+import { fetcher } from "@/lib/fetcher";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+import { v7 as uuidv7 } from "uuid";
+import { id } from "zod/v4/locales";
 
-// モックデータ - 検出結果
-const detectedLibraries = [
-  { name: "Next.js", status: "success", detected: true },
-  { name: "TypeScript", status: "success", detected: true },
-  { name: "Tailwind CSS", status: "success", detected: true },
-  { name: "Vue.js", status: "error", detected: false },
-];
+const schema = z.object({
+  owner: z.string().max(500),
+  repository: z.string().max(500),
+  branch: z.string().max(500),
+  projectReason: z.string().max(500),
+  libraryReasons: z.array(
+    z.object({
+      name: z.string().max(500),
+      reason: z.string().max(1000),
+    })
+  ),
+});
 
 export default function RegisterProjectPage(_: { params: { id: string } }) {
-  const [githubUrl, setGithubUrl] = useState("");
-  const [isDetecting, setIsDetecting] = useState(false);
-  const [detectionComplete, setDetectionComplete] = useState(false);
-  const [formData, setFormData] = useState({
-    projectReason: "",
-    libraryReasons: {
-      "Next.js": "",
-      TypeScript: "",
-      "Tailwind CSS": "",
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      owner: "",
+      repository: "",
+      branch: "",
+      projectReason: "",
+      libraryReasons: [],
     },
+    mode: "onChange",
+  });
+  const { fields: techFields, replace: replaceTechField } = useFieldArray({
+    control: form.control,
+    name: "libraryReasons",
   });
 
-  const handleDetection = () => {
-    if (!githubUrl) return;
+  const [isDetecting, setIsDetecting] = useState(false);
+  const [detectionComplete, setDetectionComplete] = useState(false);
+  const [detectedTech, setDetectedTech] = useState<TechDetectResult | null>(
+    null
+  );
+  const [detectingError, setDetectingError] = useState<string | null>(null);
 
+  const handleDetect = async () => {
+    setDetectionComplete(false);
     setIsDetecting(true);
-    // モックの検出処理
-    setTimeout(() => {
-      setIsDetecting(false);
-      setDetectionComplete(true);
-    }, 2000);
+    const owner = form.getValues("owner");
+    const repo = form.getValues("repository");
+    const branch = form.getValues("branch");
+    try {
+      const res = (await fetcher(
+        `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
+          repo
+        )}/${encodeURIComponent(branch)}`
+      )) as TechDetectResult;
+
+      setDetectedTech(res);
+
+      replaceTechField(
+        res.detected?.map((tech) => ({
+          name: tech,
+          reason: "",
+        })) ?? []
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        setDetectingError(error.message);
+      }
+    }
+    setIsDetecting(false);
+    setDetectionComplete(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("登録データ:", { githubUrl, ...formData });
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    const repositoryId = uuidv7();
+    const insertRepository = await db.insert(repositories).values({
+      id: repositoryId,
+      url: `https://github.com/${data.owner}/${data.repository}`,
+      name: data.repository,
+      description: data.projectReason,
+    });
+
+    const insertLibraries = await db.insert(libraries).values(
+      techFields.map((field) => ({
+        id: uuidv7(),
+        name: field.name,
+        reason: field.reason,
+        repositoryId: repositoryId,
+        url: "",
+      }))
+    );
+
+    console.log("Registered repository:", insertRepository);
+    console.log("Registered libraries:", insertLibraries);
   };
 
   return (
@@ -53,171 +125,163 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
             </Link>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* ステップ1: GitHub URL入力 */}
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-xl font-semibold">
-                  1. GitHub リポジトリURL
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="github-url"
-                      className="block text-sm font-medium mb-2"
-                    >
-                      GitHub URL
-                    </label>
-                    <input
-                      id="github-url"
-                      type="url"
-                      value={githubUrl}
-                      onChange={(e) => setGithubUrl(e.target.value)}
-                      placeholder="https://github.com/username/repository"
-                      className="w-full px-4 py-2 rounded-lg bg-secondary text-foreground border-none focus:outline-none focus:ring-2 focus:ring-primary"
-                      required
-                    />
-                  </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              {/* ステップ1: GitHub URL入力 */}
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold">
+                    1. GitHub リポジトリURL
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="owner"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>オーナー名</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="repository"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>リポジトリ名</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="branch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>ブランチ名</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button
                     type="button"
-                    onClick={handleDetection}
-                    disabled={!githubUrl || isDetecting}
-                    className="w-fit"
+                    disabled={
+                      !form.watch("owner") ||
+                      !form.watch("repository") ||
+                      !form.watch("branch") ||
+                      isDetecting
+                    }
+                    onClick={handleDetect}
                   >
-                    {isDetecting ? "検出中..." : "技術スタックを検出"}
+                    技術を検出
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* ステップ2: 検出結果表示 */}
-            {isDetecting && (
-              <Card className="mb-6">
-                <CardContent>
-                  <div className="flex items-center space-x-2 py-4">
-                    <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>
-                    <span className="text-muted-foreground">
-                      技術スタックを検出中...
-                    </span>
-                  </div>
                 </CardContent>
               </Card>
-            )}
 
-            {/* ステップ3: 検出結果とライブラリごとの選定理由 */}
-            {detectionComplete && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold">
-                    2. 検出結果
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {detectedLibraries.map((library) => (
-                      <div key={library.name} className="space-y-3">
-                        <div className="flex items-center space-x-3">
-                          <span
-                            className={`text-lg ${
-                              library.detected
-                                ? "text-green-500"
-                                : "text-red-500"
-                            }`}
-                          >
-                            {library.detected ? "✅" : "❌"}
-                          </span>
-                          <span className="font-medium">{library.name}</span>
-                          {!library.detected && (
-                            <span className="text-sm text-muted-foreground">
-                              (非対応)
-                            </span>
-                          )}
-                        </div>
+              {/* ステップ2: 検出結果表示 */}
+              {isDetecting && (
+                <Card className="mb-6">
+                  <CardContent>
+                    <div className="flex items-center space-x-2 py-4">
+                      <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>
+                      <span className="text-muted-foreground">
+                        技術スタックを検出中...
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
-                        {/* 検出されたライブラリのみ選定理由入力欄を表示 */}
-                        {library.detected && (
-                          <div className="ml-6">
-                            <label
-                              htmlFor={`reason-${library.name}`}
-                              className="block text-sm font-medium mb-2 text-muted-foreground"
-                            >
-                              選定理由（任意）
-                            </label>
+              {/* ステップ3: 検出結果とライブラリごとの選定理由 */}
+              {detectionComplete && (
+                <Card className="mb-6">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-semibold">
+                      2. 検出結果
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {techFields.map((tech) => (
+                      <FormField
+                        key={tech.id}
+                        control={form.control}
+                        {...form.register(
+                          `libraryReasons.${techFields.indexOf(tech)}.reason`
+                        )}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{tech.name}</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                id={`library-reason-${tech.id}`}
+                                rows={2}
+                                placeholder="例：このライブラリはパフォーマンスが高く、開発が容易です..."
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* ステップ4: プロジェクト全体の選定方針 */}
+              {detectionComplete && (
+                <Card className="mb-6">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-semibold">
+                      3. プロジェクト全体の技術選定方針
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <FormField
+                      control={form.control}
+                      name="projectReason"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>技術選定方針（任意）</FormLabel>
+                          <FormControl>
                             <textarea
-                              id={`reason-${library.name}`}
-                              value={
-                                formData.libraryReasons[
-                                  library.name as keyof typeof formData.libraryReasons
-                                ] || ""
-                              }
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  libraryReasons: {
-                                    ...formData.libraryReasons,
-                                    [library.name]: e.target.value,
-                                  },
-                                })
-                              }
-                              rows={3}
-                              placeholder={`${library.name}を選んだ理由を入力してください...`}
+                              {...field}
+                              id="project-reason"
+                              rows={4}
+                              placeholder="例：このプロジェクトではパフォーマンスと開発体験を重視し、最新の技術を採用しました..."
                               className="w-full px-4 py-2 rounded-lg bg-secondary text-foreground border-none focus:outline-none focus:ring-2 focus:ring-primary"
                             />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* ステップ4: プロジェクト全体の選定方針 */}
-            {detectionComplete && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold">
-                    3. プロジェクト全体の技術選定方針
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div>
-                    <label
-                      htmlFor="project-reason"
-                      className="block text-sm font-medium mb-2 text-muted-foreground"
-                    >
-                      技術選定の全体的な方針・考え方（任意）
-                    </label>
-                    <textarea
-                      id="project-reason"
-                      value={formData.projectReason}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          projectReason: e.target.value,
-                        })
-                      }
-                      rows={4}
-                      placeholder="例：チーム全体の開発効率を重視し、TypeScriptで型安全性を確保。パフォーマンスとSEOのバランスを取るためNext.jsを採用。デザインシステムの構築を効率化するためTailwind CSSを選択..."
-                      className="w-full px-4 py-2 rounded-lg bg-secondary text-foreground border-none focus:outline-none focus:ring-2 focus:ring-primary"
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                  </CardContent>
+                </Card>
+              )}
 
-            {/* 登録ボタン */}
-            {detectionComplete && (
-              <div className="flex gap-4">
-                <Button type="submit">プロジェクトを登録</Button>
-                <Button type="button" variant="outline" asChild>
-                  <Link href="/repositories">キャンセル</Link>
-                </Button>
-              </div>
-            )}
-          </form>
+              {/* 登録ボタン */}
+              {detectionComplete && (
+                <div className="flex gap-4">
+                  <Button type="submit">プロジェクトを登録</Button>
+                  <Button type="button" variant="outline" asChild>
+                    <Link href="/repositories">キャンセル</Link>
+                  </Button>
+                </div>
+              )}
+            </form>
+          </Form>
 
           {/* Tips */}
           <Card className="mt-8">
