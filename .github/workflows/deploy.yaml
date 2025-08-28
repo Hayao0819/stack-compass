@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy to AppRun
         id: deploy
-        uses: rito528/sacloud-apprun-action@v6
+        uses: rito528/sacloud-apprun-action@v7
         with:
           use-repository-dockerfile: true
           app-dir: .
