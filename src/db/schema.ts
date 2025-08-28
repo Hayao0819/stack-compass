@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const repositories = sqliteTable("repositories", {
@@ -11,6 +12,10 @@ export const repositories = sqliteTable("repositories", {
     .$defaultFn(() => Date.now())
     .$onUpdate(() => Date.now()),
 });
+
+export const repositoriesRelations = relations(repositories, ({ many }) => ({
+  libraries: many(libraries),
+}));
 
 export const libraries = sqliteTable("libraries", {
   id: text("id").primaryKey(),
@@ -26,3 +31,10 @@ export const libraries = sqliteTable("libraries", {
     .$defaultFn(() => Date.now())
     .$onUpdate(() => Date.now()),
 });
+
+export const librariesRelations = relations(libraries, ({ one }) => ({
+  repository: one(repositories, {
+    fields: [libraries.repositoryId],
+    references: [repositories.id],
+  }),
+}));
