@@ -32,7 +32,7 @@ export const registerFormSchema = z.object({
     z.object({
       name: z.string().max(500),
       reason: z.string().max(1000),
-    }),
+    })
   ),
 });
 
@@ -66,15 +66,16 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     try {
       const res = (await fetcher(
         `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo,
-        )}/${encodeURIComponent(branch)}`,
+          repo
+        )}/${encodeURIComponent(branch)}`
       )) as TechDetectResult;
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
-        })) ?? [],
+        })) ?? []
       );
+      setDetectingError(null);
     } catch (error) {
       if (error instanceof Error) {
         setDetectingError(error.message);
@@ -88,7 +89,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
   };
 
   const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
-    await registerRepository(data, techFields);
+    await registerRepository(data);
   };
 
   return (
@@ -197,13 +198,11 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {techFields.map((tech) => (
+                    {techFields.map((tech, index) => (
                       <FormField
                         key={tech.id}
                         control={form.control}
-                        {...form.register(
-                          `libraryReasons.${techFields.indexOf(tech)}.reason`,
-                        )}
+                        name={`libraryReasons.${index}.reason`}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>{tech.name}</FormLabel>
