@@ -8,4 +8,5 @@ cd "$(dirname "$0")" || exit 1
 docker buildx build \
     --build-arg DB_FILE_NAME="$DB_FILE_NAME" \
     -t "stack-compass-dev:latest" \
+    -t "intern-shun.sakuracr.jp/hayao/stack-compass:latest" \
     .
