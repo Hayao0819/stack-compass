@@ -1,7 +1,7 @@
 name: deploy to AppRun
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   deploy:
