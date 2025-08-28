@@ -1,6 +1,7 @@
 {
   "editor.defaultFormatter": "biomejs.biome",
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "biome.configurationPath": "biome.json"
 }
