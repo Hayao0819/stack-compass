@@ -12,10 +12,10 @@ jobs:
 
       - name: Create litestream config
         env:
-          SAKURA_STORAGE_BUCKET_NAME: ${{ secrets.SAKURA_STORAGE_BUCKET_NAME }}
+          SAKURA_STORAGE_BUCKET_NAME: ${{ vars.SAKURA_STORAGE_BUCKET_NAME }}
           SAKURA_STORAGE_KEYID: ${{ secrets.SAKURA_STORAGE_KEYID }}
           SAKURA_STORAGE_SECRET: ${{ secrets.SAKURA_STORAGE_SECRET }}
-          APP_NAME: ${{ secrets.APP_NAME }}
+          APP_NAME: stack-compass
           DB_FILE_NAME: /app/db/app.db
         run: ./scripts/common-litestream-config.sh > ./litestream.yml
 
