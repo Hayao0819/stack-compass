@@ -12,7 +12,7 @@ jobs:
 
       - name: Deploy to AppRun
         id: deploy
-        uses: ippanpeople/sacloud-apprun-action@v0.0.4
+        uses: rito528/sacloud-apprun-action@v1
         with:
           use-repository-dockerfile: true
           app-dir: .
@@ -28,3 +28,6 @@ jobs:
           object-storage-secret-key: ${{ secrets.SAKURA_STORAGE_SECRET }}
           sqlite-db-path: ./db/app.db
           litestream-replicate-interval: 10s
+          auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
+          auth-github-screts: ${{ secrets.AUTH_GITHUB_SECRET }}
+          auth-secret: ${{ secrets.AUTH_SECRET }}
