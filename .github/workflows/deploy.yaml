@@ -12,7 +12,7 @@ jobs:
 
       - name: Deploy to AppRun
         id: deploy
-        uses: rito528/sacloud-apprun-action@v3
+        uses: rito528/sacloud-apprun-action@v4
         with:
           use-repository-dockerfile: true
           app-dir: .
@@ -29,6 +29,6 @@ jobs:
           sqlite-db-path: ./db/app.db
           litestream-replicate-interval: 10s
           auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
-          auth-github-screts: ${{ secrets.AUTH_GITHUB_SECRET }}
+          auth-github-scret: ${{ secrets.AUTH_GITHUB_SECRET }}
           auth-secret: ${{ secrets.AUTH_SECRET }}
           auth-url: "https://app-e75a0946-2227-47e9-a56f-f92cbb6f79a3.ingress.apprun.sakura.ne.jp/"
