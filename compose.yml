@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - DB_FILE_NAME=./db/app.db
     env_file:
       - .env.local
     ports:
