@@ -15,7 +15,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY /app/node_modules ./node_modules
 COPY . .
 
 ENV NODE_ENV=production
