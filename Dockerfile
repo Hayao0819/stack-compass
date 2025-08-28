@@ -13,7 +13,7 @@ RUN apk add --no-cache libc6-compat && /app/scripts/install-litestream.sh
 
 FROM base AS deps
 COPY package.json package-lock.yaml* ./
-RUN npm i --frozen-lockfile
+RUN npm install
 
 FROM deps AS builder
 COPY . .
