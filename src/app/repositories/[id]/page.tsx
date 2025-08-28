@@ -22,7 +22,9 @@ export default async function RepositoryDetailPage({
       <div className="min-h-screen bg-background text-foreground">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8">リポジトリが見つかりません</h1>
+            <h1 className="text-3xl font-bold mb-8">
+              リポジトリが見つかりません
+            </h1>
             <Link href="/repositories" className="text-primary hover:underline">
               ← リポジトリ一覧に戻る
             </Link>
@@ -103,9 +105,7 @@ export default async function RepositoryDetailPage({
               {repositoryLibraries.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">
-                      📦 使用ライブラリ
-                    </CardTitle>
+                    <CardTitle className="text-lg">📦 使用ライブラリ</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -114,9 +114,9 @@ export default async function RepositoryDetailPage({
                           <div className="flex items-start justify-between">
                             <div>
                               <h3 className="font-semibold">{library.name}</h3>
-                              <a 
-                                href={library.url} 
-                                target="_blank" 
+                              <a
+                                href={library.url}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm text-primary hover:underline break-all"
                               >
@@ -125,7 +125,9 @@ export default async function RepositoryDetailPage({
                             </div>
                           </div>
                           <div className="mt-2">
-                            <span className="text-sm text-muted-foreground">選択理由:</span>
+                            <span className="text-sm text-muted-foreground">
+                              選択理由:
+                            </span>
                             <p className="text-sm mt-1">{library.reason}</p>
                           </div>
                         </div>
@@ -150,7 +152,9 @@ export default async function RepositoryDetailPage({
                         作成日
                       </span>
                       <span className="text-sm">
-                        {repo.createdAt ? new Date(repo.createdAt).toLocaleDateString('ja-JP') : '-'}
+                        {repo.createdAt
+                          ? new Date(repo.createdAt).toLocaleDateString("ja-JP")
+                          : "-"}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -158,7 +162,9 @@ export default async function RepositoryDetailPage({
                         最終更新
                       </span>
                       <span className="text-sm">
-                        {repo.updatedAt ? new Date(repo.updatedAt).toLocaleDateString('ja-JP') : '-'}
+                        {repo.updatedAt
+                          ? new Date(repo.updatedAt).toLocaleDateString("ja-JP")
+                          : "-"}
                       </span>
                     </div>
                   </div>

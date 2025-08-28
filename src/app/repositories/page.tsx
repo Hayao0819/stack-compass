@@ -51,9 +51,7 @@ export default async function RepositoriesPage() {
                   </p>
                 )}
 
-                <p className="text-muted-foreground text-xs">
-                  {repo.url}
-                </p>
+                <p className="text-muted-foreground text-xs">{repo.url}</p>
               </CardContent>
             </Card>
           ))}
