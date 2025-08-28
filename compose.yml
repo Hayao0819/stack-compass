@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - DB_FILE_NAME=./db/app.db
+        - DB_FILE_NAME=/app/db/app.db
     env_file:
       - .env.local
     ports:

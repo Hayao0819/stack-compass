@@ -9,31 +9,33 @@ WORKDIR /app
 COPY ./scripts /app/scripts
 # # hadolint ignore=DL3018
 RUN apk add --no-cache libc6-compat && /app/scripts/install-litestream.sh
+# RUN /app/scripts/install-litestream.sh
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable pnpm && pnpm i --frozen-lockfile
 
-
 FROM deps AS builder
 COPY . .
+COPY --from=deps /app/node_modules ./node_modules
 ARG DB_FILE_NAME
 COPY ./litestream.yml /etc/litestream.yml
 RUN /app/scripts/setup-litestream.sh 
 RUN pnpm migrate && pnpm build
 
-FROM builder AS prod
+FROM base AS prod
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME="0.0.0.0"
 EXPOSE 3000
 
 WORKDIR /app
 
+COPY --from=builder /app/.next/standalone .
 COPY --from=builder /app/db ./db
 COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/.next/standalone ./.next/standalone
 COPY --from=builder /app/.next/static ./.next/static
 
-RUN /app/scripts/setup-litestream.sh 
+ARG DB_FILE_NAME
 
-ENTRYPOINT ["/app/scripts/start-container.sh"]
+# ENTRYPOINT ["/app/scripts/start-container.sh"]
+CMD ["/app/scripts/start-container.sh"]
