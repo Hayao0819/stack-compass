@@ -31,4 +31,4 @@ jobs:
           auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
           auth-github-screts: ${{ secrets.AUTH_GITHUB_SECRET }}
           auth-secret: ${{ secrets.AUTH_SECRET }}
-          auth-url: "https://app-e75a0946-2227-47e9-a56f-f92cbb6f79a3.ingress.apprun.sakura.ne.jp/"
+          auth-url: "https://app-e75a0946-2227-47e9-a56f-f92cbb6f79a3.ingress.apprun.sakura.ne.jp/api/auth/callback/github"
