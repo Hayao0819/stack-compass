@@ -32,11 +32,16 @@ export type ManifestContent =
   | { type: "raw"; content: string }; // requirements.txt など
 
 export abstract class Detector {
+  public readonly name: string;
+
   constructor(
+    name: string,
     protected files: string[],
     protected manifests: Record<string, ManifestContent> = {},
     protected langs: string[] = [],
-  ) {}
+  ) {
+    this.name = name;
+  }
 
   // --- 共通ユーティリティ ---
   protected hasFile(name: string | RegExp): boolean {

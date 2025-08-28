@@ -1,7 +1,14 @@
-import { Detector } from "./base";
+import { Detector, type ManifestContent } from "./base";
 
 // ================= Web系 =================
 export class NextDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Next", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("next.config.js") || this.hasFile("next.config.mjs");
   }
@@ -14,6 +21,13 @@ export class NextDetector extends Detector {
 }
 
 export class ReactDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("React", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile(/App\.(t|j)sx$/);
   }
@@ -26,6 +40,13 @@ export class ReactDetector extends Detector {
 }
 
 export class VueDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Vue", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("vue.config.js");
   }
@@ -38,6 +59,13 @@ export class VueDetector extends Detector {
 }
 
 export class AngularDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Angular", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("angular.json");
   }
@@ -50,6 +78,13 @@ export class AngularDetector extends Detector {
 }
 
 export class SvelteDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Svelte", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("svelte.config.js") || this.hasFile("svelte.config.ts");
   }
@@ -62,6 +97,13 @@ export class SvelteDetector extends Detector {
 }
 
 export class ExpressDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Express", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return false;
   }
@@ -74,6 +116,13 @@ export class ExpressDetector extends Detector {
 }
 
 export class NestDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Nest", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return false;
   }
@@ -87,6 +136,13 @@ export class NestDetector extends Detector {
 
 // ================= Python系 =================
 export class DjangoDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Django", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("manage.py") || this.hasFile(/settings\.py$/);
   }
@@ -102,6 +158,13 @@ export class DjangoDetector extends Detector {
 }
 
 export class FlaskDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Flask", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("app.py");
   }
@@ -118,6 +181,13 @@ export class FlaskDetector extends Detector {
 
 // ================= Java系 =================
 export class SpringDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Spring", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("pom.xml") || this.hasFile("build.gradle");
   }
@@ -134,6 +204,13 @@ export class SpringDetector extends Detector {
 
 // ================= PHP系 =================
 export class LaravelDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Laravel", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("artisan");
   }
@@ -147,6 +224,13 @@ export class LaravelDetector extends Detector {
 
 // ================= Rust/Go系 =================
 export class GoDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Go", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("go.mod");
   }
@@ -160,6 +244,13 @@ export class GoDetector extends Detector {
 }
 
 export class RustDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Rust", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile("Cargo.toml");
   }
@@ -176,6 +267,13 @@ export class RustDetector extends Detector {
 
 // ================= Infrastructure / Ops =================
 export class DockerDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Docker", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return (
       this.hasFile(/(^|\/)Dockerfile$/i) || this.hasFile(/(^|\/)dockerfile$/i)
@@ -193,6 +291,13 @@ export class DockerDetector extends Detector {
 }
 
 export class DockerComposeDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("DockerCompose", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile(/docker-compose\.ya?ml$/i);
   }
@@ -208,6 +313,13 @@ export class DockerComposeDetector extends Detector {
 }
 
 export class KubernetesDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Kubernetes", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return (
       this.hasFile(/(^|\/)deployment\.ya?ml$/i) ||
@@ -227,6 +339,13 @@ export class KubernetesDetector extends Detector {
 }
 
 export class TerraformDetector extends Detector {
+  constructor(
+    files: string[],
+    manifests: Record<string, ManifestContent> = {},
+    langs: string[] = [],
+  ) {
+    super("Terraform", files, manifests, langs);
+  }
   detectByFiles(): boolean {
     return this.hasFile(/\.tf$/);
   }
