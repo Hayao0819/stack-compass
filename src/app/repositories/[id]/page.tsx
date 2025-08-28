@@ -11,13 +11,12 @@ export default async function RepositoryDetailPage({
 }) {
   const { id } = await params;
 
-  const repository = await db
-    .select()
-    .from(repositories)
-    .where(eq(repositories.id, id))
-    .limit(1);
+  const repository = await db.query.repositories.findFirst({
+    where: eq(repositories.id, id),
+    with: { libraries: true },
+  });
 
-  if (repository.length === 0) {
+  if (!repository) {
     return (
       <div className="min-h-screen bg-background text-foreground">
         <div className="container mx-auto px-4 py-8">
@@ -34,19 +33,12 @@ export default async function RepositoryDetailPage({
     );
   }
 
-  const repositoryLibraries = await db
-    .select()
-    .from(libraries)
-    .where(eq(libraries.repositoryId, id));
-
-  const repo = repository[0];
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">{repo.name}</h1>
+            <h1 className="text-3xl font-bold">{repository.name}</h1>
             <Link href="/repositories" className="text-primary hover:underline">
               ← リポジトリ一覧に戻る
             </Link>
@@ -66,7 +58,7 @@ export default async function RepositoryDetailPage({
                       </span>
                     </div>
                     <a
-                      href={repo.url}
+                      href={repository.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:underline flex items-center gap-2"
@@ -81,20 +73,20 @@ export default async function RepositoryDetailPage({
                       <span className="text-muted-foreground text-sm">
                         名前:
                       </span>
-                      <p className="font-mono">{repo.name}</p>
+                      <p className="font-mono">{repository.name}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground text-sm">
                         説明:
                       </span>
-                      <p>{repo.description}</p>
+                      <p>{repository.description}</p>
                     </div>
                     <div className="flex gap-6">
                       <div>
                         <span className="text-muted-foreground text-sm">
                           URL:
                         </span>
-                        <p className="font-semibold break-all">{repo.url}</p>
+                        <p className="font-semibold break-all">{repository.url}</p>
                       </div>
                     </div>
                   </div>
@@ -102,14 +94,14 @@ export default async function RepositoryDetailPage({
               </Card>
 
               {/* ライブラリ情報 */}
-              {repositoryLibraries.length > 0 && (
+              {repository.libraries.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">📦 使用ライブラリ</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {repositoryLibraries.map((library) => (
+                      {repository.libraries.map((library) => (
                         <div key={library.id} className="border rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div>
@@ -152,8 +144,8 @@ export default async function RepositoryDetailPage({
                         作成日
                       </span>
                       <span className="text-sm">
-                        {repo.createdAt
-                          ? new Date(repo.createdAt).toLocaleDateString("ja-JP")
+                        {repository.createdAt
+                          ? new Date(repository.createdAt).toLocaleDateString("ja-JP")
                           : "-"}
                       </span>
                     </div>
@@ -162,8 +154,8 @@ export default async function RepositoryDetailPage({
                         最終更新
                       </span>
                       <span className="text-sm">
-                        {repo.updatedAt
-                          ? new Date(repo.updatedAt).toLocaleDateString("ja-JP")
+                        {repository.updatedAt
+                          ? new Date(repository .updatedAt).toLocaleDateString("ja-JP")
                           : "-"}
                       </span>
                     </div>
