@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { libraries, repositories } from "@/db/schema";
+import { repositories } from "@/db/schema";
 import { db } from "@/index";
 
 export default async function RepositoryDetailPage({
@@ -86,7 +86,9 @@ export default async function RepositoryDetailPage({
                         <span className="text-muted-foreground text-sm">
                           URL:
                         </span>
-                        <p className="font-semibold break-all">{repository.url}</p>
+                        <p className="font-semibold break-all">
+                          {repository.url}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -145,7 +147,9 @@ export default async function RepositoryDetailPage({
                       </span>
                       <span className="text-sm">
                         {repository.createdAt
-                          ? new Date(repository.createdAt).toLocaleDateString("ja-JP")
+                          ? new Date(repository.createdAt).toLocaleDateString(
+                              "ja-JP",
+                            )
                           : "-"}
                       </span>
                     </div>
@@ -155,7 +159,9 @@ export default async function RepositoryDetailPage({
                       </span>
                       <span className="text-sm">
                         {repository.updatedAt
-                          ? new Date(repository .updatedAt).toLocaleDateString("ja-JP")
+                          ? new Date(repository.updatedAt).toLocaleDateString(
+                              "ja-JP",
+                            )
                           : "-"}
                       </span>
                     </div>

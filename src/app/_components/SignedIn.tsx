@@ -1,5 +1,5 @@
+import Link from "next/link";
 import type { Session } from "next-auth";
-
 import { SignOutButton } from "@/components/SignOutButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { db } from "@/index";
-import Link from "next/link";
 
 interface SignedInProps {
   session: Session;
@@ -65,7 +64,7 @@ export async function SignedIn({ session }: SignedInProps) {
                       <span>
                         更新:{" "}
                         {new Date(updatedAt || Date.now()).toLocaleDateString(
-                          "ja-JP"
+                          "ja-JP",
                         )}
                       </span>
                     </div>
@@ -101,7 +100,7 @@ export async function SignedIn({ session }: SignedInProps) {
                     </CardAction>
                   </CardFooter>
                 </Card>
-              )
+              ),
             )}
           </div>
         </div>

@@ -32,7 +32,7 @@ export const registerFormSchema = z.object({
     z.object({
       name: z.string().max(500),
       reason: z.string().max(1000),
-    })
+    }),
   ),
 });
 
@@ -66,14 +66,14 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     try {
       const res = (await fetcher(
         `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo
-        )}/${encodeURIComponent(branch)}`
+          repo,
+        )}/${encodeURIComponent(branch)}`,
       )) as TechDetectResult;
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
-        })) ?? []
+        })) ?? [],
       );
       setDetectingError(null);
     } catch (error) {
