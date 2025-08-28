@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleX } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,8 +22,6 @@ import { Textarea } from "@/components/ui/textarea";
 import type { TechDetectResult } from "@/lib/detector/call";
 import { fetcher } from "@/lib/fetcher";
 import { registerRepository } from "./action";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CircleX } from "lucide-react";
 
 export const registerFormSchema = z.object({
   owner: z.string().max(500),
@@ -32,7 +32,7 @@ export const registerFormSchema = z.object({
     z.object({
       name: z.string().max(500),
       reason: z.string().max(1000),
-    })
+    }),
   ),
 });
 
@@ -66,20 +66,20 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     try {
       const res = (await fetcher(
         `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo
-        )}/${encodeURIComponent(branch)}`
+          repo,
+        )}/${encodeURIComponent(branch)}`,
       )) as TechDetectResult;
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
-        })) ?? []
+        })) ?? [],
       );
     } catch (error) {
       if (error instanceof Error) {
         setDetectingError(error.message);
       } else {
-        setDetectingError("Unknown Error")
+        setDetectingError("Unknown Error");
       }
     }
 
@@ -202,7 +202,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                         key={tech.id}
                         control={form.control}
                         {...form.register(
-                          `libraryReasons.${techFields.indexOf(tech)}.reason`
+                          `libraryReasons.${techFields.indexOf(tech)}.reason`,
                         )}
                         render={({ field }) => (
                           <FormItem>

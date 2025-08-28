@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import type { Session } from "next-auth";
 
 import { SignOutButton } from "@/components/SignOutButton";
@@ -60,7 +59,7 @@ export async function SignedIn({ session }: SignedInProps) {
                       <span>
                         更新:{" "}
                         {new Date(updatedAt || Date.now()).toLocaleDateString(
-                          "ja-JP"
+                          "ja-JP",
                         )}
                       </span>
                     </div>
@@ -96,7 +95,7 @@ export async function SignedIn({ session }: SignedInProps) {
                     </CardAction>
                   </CardFooter>
                 </Card>
-              )
+              ),
             )}
           </div>
         </div>
