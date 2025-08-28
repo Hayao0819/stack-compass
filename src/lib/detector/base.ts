@@ -1,4 +1,28 @@
 // manifest-types.ts
+import { z } from "zod";
+
+export const manifestContentSchema = z.union([
+  z.object({
+    type: z.literal("json"),
+    content: z.any(),
+  }),
+  z.object({
+    type: z.literal("toml"),
+    content: z.record(z.string(), z.any()),
+  }),
+  z.object({
+    type: z.literal("gomod"),
+    content: z.object({
+      module: z.string(),
+      require: z.array(z.string()),
+    }),
+  }),
+  z.object({
+    type: z.literal("raw"),
+    content: z.string(),
+  }),
+]);
+
 export type ManifestContent =
   // biome-ignore lint/suspicious/noExplicitAny: TODO: 後で直す
   | { type: "json"; content: any } // package.json, composer.json など
