@@ -13,16 +13,6 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN  corepack enable pnpm && pnpm i --frozen-lockfile
 
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable pnpm && pnpm run build
-
 # Run stage
 FROM alpine:3.20
 
@@ -32,13 +22,13 @@ RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://
 
 WORKDIR /app
 
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 EXPOSE 3000
 
@@ -87,6 +77,9 @@ LITESTREAM_EOF
   sync
 
   cd /app
+
+  corepack enable pnpm && pnpm run build
+
   exec /usr/local/bin/litestream replicate -config /etc/litestream.yml -exec "node server.js"
 else
   echo "Litestream backup not configured, starting app directly..."
