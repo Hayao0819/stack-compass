@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleX } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -53,7 +55,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
 
   const [isDetecting, setIsDetecting] = useState(false);
   const [detectionComplete, setDetectionComplete] = useState(false);
-  const [, setDetectingError] = useState<string | null>(null);
+  const [detectingError, setDetectingError] = useState<string | null>(null);
 
   const handleDetect = async () => {
     setDetectionComplete(false);
@@ -67,24 +69,27 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
           repo,
         )}/${encodeURIComponent(branch)}`,
       )) as TechDetectResult;
-
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
         })) ?? [],
       );
+      setDetectingError(null);
     } catch (error) {
       if (error instanceof Error) {
         setDetectingError(error.message);
+      } else {
+        setDetectingError("Unknown Error");
       }
     }
+
     setIsDetecting(false);
     setDetectionComplete(true);
   };
 
   const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
-    await registerRepository(data, techFields);
+    await registerRepository(data);
   };
 
   return (
@@ -176,8 +181,16 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                 </Card>
               )}
 
+              {detectingError && (
+                <Alert variant="destructive" className="mb-6">
+                  <CircleX />
+                  <AlertTitle>エラーが発生しました</AlertTitle>
+                  <AlertDescription>{detectingError}</AlertDescription>
+                </Alert>
+              )}
+
               {/* ステップ3: 検出結果とライブラリごとの選定理由 */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <Card className="mb-6">
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold">
@@ -185,13 +198,11 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {techFields.map((tech) => (
+                    {techFields.map((tech, index) => (
                       <FormField
                         key={tech.id}
                         control={form.control}
-                        {...form.register(
-                          `libraryReasons.${techFields.indexOf(tech)}.reason`,
-                        )}
+                        name={`libraryReasons.${index}.reason`}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>{tech.name}</FormLabel>
@@ -213,7 +224,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               )}
 
               {/* ステップ4: プロジェクト全体の選定方針 */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <Card className="mb-6">
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold">
@@ -245,7 +256,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               )}
 
               {/* 登録ボタン */}
-              {detectionComplete && (
+              {detectionComplete && !detectingError && (
                 <div className="flex gap-4">
                   <Button
                     type="submit"

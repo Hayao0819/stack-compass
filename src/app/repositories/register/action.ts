@@ -9,7 +9,6 @@ import type { registerFormSchema } from "./page";
 
 export async function registerRepository(
   data: z.infer<typeof registerFormSchema>,
-  techFields: { name: string; reason: string }[],
 ) {
   const repositoryId = uuidv7();
 
@@ -21,10 +20,10 @@ export async function registerRepository(
   });
 
   await db.insert(libraries).values(
-    techFields.map((field) => ({
+    data.libraryReasons.map((library) => ({
       id: uuidv7(),
-      name: field.name,
-      reason: field.reason,
+      name: library.name,
+      reason: library.reason,
       repositoryId: repositoryId,
       url: "",
     })),
