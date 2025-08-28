@@ -5,7 +5,6 @@ import NextAuth, {
 } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
-import { env } from "process";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
