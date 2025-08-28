@@ -3,8 +3,6 @@
 
 FROM node:22-alpine AS base
 
-# Install dependencies only when needed
-FROM base AS deps
 # hadolint ignore=DL3018
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -13,14 +11,9 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN  corepack enable pnpm && pnpm i --frozen-lockfile
 
-# Run stage
-FROM alpine:3.20
-
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
-
-WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
