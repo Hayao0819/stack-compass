@@ -1,4 +1,6 @@
+import { eq } from "drizzle-orm";
 import type { Session } from "next-auth";
+
 import { SignOutButton } from "@/components/SignOutButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,12 +12,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { libraries, repositories } from "@/db/schema";
+import { db } from "@/index";
 
 interface SignedInProps {
   session: Session;
 }
 
-export function SignedIn({ session }: SignedInProps) {
+export async function SignedIn({ session }: SignedInProps) {
+  const userRepositories = await db
+    .select()
+    .from(repositories)
+    .leftJoin(libraries, eq(repositories.id, libraries.repositoryId)).limit(3);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
@@ -36,117 +45,48 @@ export function SignedIn({ session }: SignedInProps) {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-semibold text-lg">
-                  sample-project
-                </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground mb-2">
-                  Next.jsで作ったサンプルプロジェクト
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="bg-secondary px-2 py-1 rounded text-xs">
-                    TypeScript
-                  </span>
-                  <span>更新: 2025/01/15</span>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-medium text-sm mb-2">検出された技術:</p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                        ✅ Next.js
-                      </span>
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                        ✅ React
-                      </span>
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                        ✅ TypeScript
-                      </span>
+            {userRepositories.map(({ repositories: repo, libraries: lib }) => (
+              <Card key={repo.id}>
+                <CardHeader>
+                  <CardTitle className="font-semibold text-lg">
+                    {repo.name}
+                  </CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground mb-2">
+                    {repo.description || "説明なし"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>更新: {new Date(repo.updatedAt || Date.now()).toLocaleDateString('ja-JP')}</span>
+                  </div>
+                  {lib && (
+                    <div className="space-y-3 mt-3">
+                      <div>
+                        <p className="font-medium text-sm mb-2">検出された技術:</p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            ✅ {lib.name}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <CardAction>
-                  <Button variant="ghost">
-                    <a
-                      href="http://github.com/user/old-project"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      GitHub で見る →
-                    </a>
-                  </Button>
-                </CardAction>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-semibold text-lg">
-                  portfolio-site
-                </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground mb-2">
-                  個人ポートフォリオサイト
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="bg-secondary px-2 py-1 rounded text-xs">
-                    JavaScript
-                  </span>
-                  <span>更新: 2025/01/10</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <CardAction>
-                  <Button>技術スタックをスキャン</Button>
-                </CardAction>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-semibold text-lg">
-                  old-project
-                </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground mb-2">
-                  説明なし
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="bg-secondary px-2 py-1 rounded text-xs">
-                    Python
-                  </span>
-                  <span>更新: 2024/12/20</span>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-medium text-sm mb-2">検出された技術:</p>
-                    <span className="text-muted-foreground text-xs">
-                      ❌ 対応技術が見つかりませんでした
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <CardAction>
-                  <Button variant="ghost" asChild>
-                    <a
-                      href="https://github.com/user/old-project"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      GitHub で見る →
-                    </a>
-                  </Button>
-                </CardAction>
-              </CardFooter>
-            </Card>
+                  )}
+                </CardContent>
+                <CardFooter>
+                  <CardAction>
+                    <Button variant="ghost" asChild>
+                      <a
+                        href={repo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        GitHub で見る →
+                      </a>
+                    </Button>
+                  </CardAction>
+                </CardFooter>
+              </Card>
+            ))}
           </div>
         </div>
 
