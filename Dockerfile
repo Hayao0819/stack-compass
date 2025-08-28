@@ -80,7 +80,7 @@ LITESTREAM_EOF
 
   corepack enable pnpm && pnpm run build
 
-  exec /usr/local/bin/litestream replicate -config /etc/litestream.yml -exec "node server.js"
+  exec /usr/local/bin/litestream replicate -config /etc/litestream.yml -exec "node .next/standalone/server.js"
 else
   echo "Litestream backup not configured, starting app directly..."
   sync
