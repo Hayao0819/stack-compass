@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { db } from "@/index";
+import Link from "next/link";
 
 interface SignedInProps {
   session: Session;
@@ -48,7 +49,12 @@ export async function SignedIn({ session }: SignedInProps) {
                 <Card key={id}>
                   <CardHeader>
                     <CardTitle className="font-semibold text-lg">
-                      {name}
+                      <Link
+                        href={`/repositories/${id}`}
+                        className="text-primary hover:underline"
+                      >
+                        {name}
+                      </Link>
                     </CardTitle>
                     <CardDescription className="text-sm text-muted-foreground mb-2">
                       {description || "説明なし"}
@@ -59,7 +65,7 @@ export async function SignedIn({ session }: SignedInProps) {
                       <span>
                         更新:{" "}
                         {new Date(updatedAt || Date.now()).toLocaleDateString(
-                          "ja-JP",
+                          "ja-JP"
                         )}
                       </span>
                     </div>
@@ -95,7 +101,7 @@ export async function SignedIn({ session }: SignedInProps) {
                     </CardAction>
                   </CardFooter>
                 </Card>
-              ),
+              )
             )}
           </div>
         </div>
