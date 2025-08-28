@@ -12,16 +12,16 @@ RUN apk add --no-cache libc6-compat && /app/scripts/install-litestream.sh
 # RUN /app/scripts/install-litestream.sh
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+COPY package.json package-lock.yaml* ./
+RUN npm i --frozen-lockfile
 
 FROM deps AS builder
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 ARG DB_FILE_NAME
 COPY ./litestream.yml /etc/litestream.yml
-RUN /app/scripts/setup-litestream.sh 
-RUN pnpm migrate && pnpm build
+RUN /app/scripts/setup-litestream.sh
+RUN npm run migrate && npm run build
 
 FROM base AS prod
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
