@@ -68,7 +68,8 @@ LITESTREAM_EOF
 
   cd /app
 
-  corepack enable pnpm && pnpm run build
+  corepack enable pnpm && pnpm install --frozen-lockfile
+  pnpm run build
 
   exec /usr/local/bin/litestream replicate -config /etc/litestream.yml -exec "node .next/standalone/server.js"
 else
