@@ -18,8 +18,6 @@ RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
-
 EXPOSE 3000
 
 ENV PORT=3000
@@ -67,7 +65,7 @@ LITESTREAM_EOF
   cd /app
 
   corepack enable pnpm && pnpm install --frozen-lockfile
-  
+
   pnpm migrate
   pnpm run build
 
@@ -84,7 +82,5 @@ RUN chmod +x /app/setup-litestream.sh
 ARG PORT=8080
 ENV PORT=$PORT
 EXPOSE $PORT
-
-USER nextjs
 
 ENTRYPOINT ["/app/setup-litestream.sh"]
