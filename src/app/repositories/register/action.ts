@@ -9,7 +9,7 @@ import type { registerFormSchema } from "./page";
 
 export async function registerRepository(
   data: z.infer<typeof registerFormSchema>,
-  techFields: { name: string; reason: string }[]
+  techFields: { name: string; reason: string }[],
 ) {
   const repositoryId = uuidv7();
 
@@ -27,7 +27,7 @@ export async function registerRepository(
       reason: field.reason,
       repositoryId: repositoryId,
       url: "",
-    }))
+    })),
   );
 
   redirect(`/repositories/${repositoryId}`);

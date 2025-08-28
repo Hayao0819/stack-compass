@@ -8,7 +8,7 @@ export function useTechDetect(owner?: string, repo?: string, branch = "main") {
   const key =
     owner && repo
       ? `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo
+          repo,
         )}/${encodeURIComponent(branch)}`
       : null;
 
@@ -17,18 +17,18 @@ export function useTechDetect(owner?: string, repo?: string, branch = "main") {
     fetcher,
     {
       revalidateOnFocus: false,
-    }
+    },
   );
 
   const detect = useCallback(
     async (o: string, r: string, b = "main") => {
       const url = `/api/detect/${encodeURIComponent(o)}/${encodeURIComponent(
-        r
+        r,
       )}/${encodeURIComponent(b)}`;
       // mutate を使って即時フェッチ＆キャッシュ更新
       return mutate(() => fetcher(url), { revalidate: true });
     },
-    [mutate]
+    [mutate],
   );
 
   return {

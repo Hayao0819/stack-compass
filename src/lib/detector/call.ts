@@ -14,12 +14,12 @@ export type TechDetectResult = {
 export async function fetchTechDetectServer(
   owner: string,
   repo: string,
-  branch = "main"
+  branch = "main",
 ): Promise<TechDetectResult> {
   if (!owner || !repo) throw new Error("owner and repo are required");
 
   const url = `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-    repo
+    repo,
   )}/${encodeURIComponent(branch)}`;
   const res = await fetch(url, { method: "GET" });
   if (!res.ok) {

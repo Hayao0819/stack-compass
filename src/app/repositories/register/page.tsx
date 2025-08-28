@@ -30,7 +30,7 @@ export const registerFormSchema = z.object({
     z.object({
       name: z.string().max(500),
       reason: z.string().max(1000),
-    })
+    }),
   ),
 });
 
@@ -53,10 +53,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
 
   const [isDetecting, setIsDetecting] = useState(false);
   const [detectionComplete, setDetectionComplete] = useState(false);
-  const [detectedTech, setDetectedTech] = useState<TechDetectResult | null>(
-    null
-  );
-  const [detectingError, setDetectingError] = useState<string | null>(null);
+  const [, setDetectingError] = useState<string | null>(null);
 
   const handleDetect = async () => {
     setDetectionComplete(false);
@@ -67,17 +64,15 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     try {
       const res = (await fetcher(
         `/api/detect/${encodeURIComponent(owner)}/${encodeURIComponent(
-          repo
-        )}/${encodeURIComponent(branch)}`
+          repo,
+        )}/${encodeURIComponent(branch)}`,
       )) as TechDetectResult;
-
-      setDetectedTech(res);
 
       replaceTechField(
         res.detected?.map((tech) => ({
           name: tech,
           reason: "",
-        })) ?? []
+        })) ?? [],
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -195,7 +190,7 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
                         key={tech.id}
                         control={form.control}
                         {...form.register(
-                          `libraryReasons.${techFields.indexOf(tech)}.reason`
+                          `libraryReasons.${techFields.indexOf(tech)}.reason`,
                         )}
                         render={({ field }) => (
                           <FormItem>

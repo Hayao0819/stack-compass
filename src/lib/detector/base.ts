@@ -35,13 +35,13 @@ export abstract class Detector {
   constructor(
     protected files: string[],
     protected manifests: Record<string, ManifestContent> = {},
-    protected langs: string[] = []
+    protected langs: string[] = [],
   ) {}
 
   // --- 共通ユーティリティ ---
   protected hasFile(name: string | RegExp): boolean {
     return this.files.some((f) =>
-      typeof name === "string" ? f.endsWith(name) : name.test(f)
+      typeof name === "string" ? f.endsWith(name) : name.test(f),
     );
   }
 
