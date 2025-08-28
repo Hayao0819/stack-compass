@@ -12,7 +12,7 @@ jobs:
 
       - name: Deploy to AppRun
         id: deploy
-        uses: rito528/sacloud-apprun-action@v5
+        uses: rito528/sacloud-apprun-action@v6
         with:
           use-repository-dockerfile: true
           app-dir: .
@@ -31,4 +31,6 @@ jobs:
           auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
           auth-github-secret: ${{ secrets.AUTH_GITHUB_SECRET }}
           auth-secret: ${{ secrets.AUTH_SECRET }}
+          db-file-name: ./db/app.db
+          database-url: "file:./db/app.db"
           auth-url: "https://app-e75a0946-2227-47e9-a56f-f92cbb6f79a3.ingress.apprun.sakura.ne.jp/"

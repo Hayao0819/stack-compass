@@ -81,6 +81,8 @@ LITESTREAM_EOF
     fi
   fi
 
+  pnpm migrate
+
   echo "Starting Litestream with app integration..."
   sync
 
