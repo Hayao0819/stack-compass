@@ -5,7 +5,7 @@ set -eu
 if [ -z "${SAKURA_STORAGE_BUCKET_NAME-""}" ] ||
     [ -z "${SAKURA_STORAGE_KEYID-""}" ] ||
     [ -z "${SAKURA_STORAGE_SECRET-""}" ] ||
-    [ -n "${DB_FILE_NAME-""}" ]; then
+    [ -z "${DB_FILE_NAME-""}" ]; then
     echo "Litestream backup not configured, starting app directly..." >&2
 
 
