@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { drizzle } from "drizzle-orm/libsql";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./db/schema";
 
 dotenv.config({ path: ".env.local" });
