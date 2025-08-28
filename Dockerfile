@@ -1,4 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1
+# hadolint global ignore=DL3018
 
 FROM node:22-alpine AS base
 
@@ -25,8 +26,9 @@ RUN corepack enable pnpm && pnpm run build
 # Run stage
 FROM alpine:3.20
 
-RUN apk add --no-cache bash curl ca-certificates sqlite-libs \
-    && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
+RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
 
 WORKDIR /app
 
