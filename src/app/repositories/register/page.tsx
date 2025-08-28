@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,19 +17,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { libraries, repositories } from "@/db/schema";
-import { db } from "@/index";
 import type { TechDetectResult } from "@/lib/detector/call";
 import { fetcher } from "@/lib/fetcher";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
-import { v7 as uuidv7 } from "uuid";
-import { id } from "zod/v4/locales";
+import { registerRepository } from "./action";
 
-const schema = z.object({
+export const registerFormSchema = z.object({
   owner: z.string().max(500),
   repository: z.string().max(500),
   branch: z.string().max(500),
@@ -39,7 +36,7 @@ const schema = z.object({
 
 export default function RegisterProjectPage(_: { params: { id: string } }) {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       owner: "",
       repository: "",
@@ -91,27 +88,8 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
     setDetectionComplete(true);
   };
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
-    const repositoryId = uuidv7();
-    const insertRepository = await db.insert(repositories).values({
-      id: repositoryId,
-      url: `https://github.com/${data.owner}/${data.repository}`,
-      name: data.repository,
-      description: data.projectReason,
-    });
-
-    const insertLibraries = await db.insert(libraries).values(
-      techFields.map((field) => ({
-        id: uuidv7(),
-        name: field.name,
-        reason: field.reason,
-        repositoryId: repositoryId,
-        url: "",
-      }))
-    );
-
-    console.log("Registered repository:", insertRepository);
-    console.log("Registered libraries:", insertLibraries);
+  const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
+    await registerRepository(data, techFields);
   };
 
   return (
@@ -274,9 +252,13 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               {/* 登録ボタン */}
               {detectionComplete && (
                 <div className="flex gap-4">
-                  <Button type="submit">プロジェクトを登録</Button>
-                  <Button type="button" variant="outline" asChild>
-                    <Link href="/repositories">キャンセル</Link>
+                  <Button
+                    type="submit"
+                    disabled={
+                      !form.formState.isValid || form.formState.isSubmitting
+                    }
+                  >
+                    プロジェクトを登録
                   </Button>
                 </div>
               )}
@@ -289,17 +271,15 @@ export default function RegisterProjectPage(_: { params: { id: string } }) {
               <CardTitle>💡 Tips</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc">
                 <li>
-                  •
                   技術選定の理由を詳しく書くと、他の開発者にとって参考になります
                 </li>
                 <li>
-                  •
                   パフォーマンス、開発体験、チーム構成などの観点から記述してみてください
                 </li>
                 <li>
-                  • 登録後は公開され、他のユーザーが閲覧できるようになります
+                  登録後は公開され、他のユーザーが閲覧できるようになります
                 </li>
               </ul>
             </CardContent>
