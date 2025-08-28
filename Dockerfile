@@ -20,8 +20,9 @@ COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 ARG DB_FILE_NAME
 COPY ./litestream.yml /etc/litestream.yml
-RUN /app/scripts/setup-litestream.sh
-RUN npm run migrate && npm run build
+# RUN /app/scripts/setup-litestream.sh
+# RUN npm run migrate && npm run build
+RUN /app/scripts/build-container.sh
 
 FROM base AS prod
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
