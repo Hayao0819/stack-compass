@@ -47,7 +47,5 @@ export function runDetectors(
     new TerraformDetector(files, manifests, langs),
   ];
 
-  return detectors
-    .filter((d) => d.detect())
-    .map((d) => d.constructor.name.replace("Detector", ""));
+  return detectors.filter((d) => d.detect()).map((d) => d.name);
 }
