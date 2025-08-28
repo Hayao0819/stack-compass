@@ -77,6 +77,8 @@ LITESTREAM_EOF
     else
       echo "No backup found or restore failed, starting with fresh database"
     fi
+
+    pnpm migrate
   fi
 
   echo "Starting Litestream with app integration..."
