@@ -8,15 +8,12 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml ./
+COPY . .
 RUN  corepack enable pnpm && pnpm i --frozen-lockfile
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache bash curl ca-certificates sqlite-libs && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
-
-COPY /app/node_modules ./node_modules
-COPY . .
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
