@@ -23,17 +23,23 @@ fi
 echo "Configuring Litestream backup..." >&2
 mkdir -p "$(dirname "$DB_FILE_NAME")"
 
-if [ ! -e "$DB_FILE_NAME" ]; then
-	echo "Database not found, attempting to restore from backup..." >&2
-	if litestream restore -config /etc/litestream.yml -if-replica-exists "$DB_FILE_NAME"; then
-		echo "Database restored successfully from backup" >&2
-	else
-		echo "No backup found or restore failed, starting with fresh database" >&2
-	fi
-	sync
-	exec litestream replicate -config /etc/litestream.yml -exec "node server.js"
+echo "Attempting to restore database from replica (if exists)..." >&2
+if litestream restore -config /etc/litestream.yml -if-replica-exists "$DB_FILE_NAME"; then
+	echo "Restore step completed (replica may or may not have existed)" >&2
 else
-	echo "Database file exists, starting application..." >&2
-	sync
-	exec node server.js
+	echo "Restore step failed or no replica; continuing with local DB state" >&2
 fi
+
+
+echo "Running database migrations..." >&2
+if drizzle-kit migrate; then
+	echo "Migrations completed successfully" >&2
+else
+	echo "Migration failed" >&2
+	exit 1
+fi
+
+sync
+
+# 3) レプリケーションを開始し、アプリを起動
+exec litestream replicate -config /etc/litestream.yml -exec "node server.js"
