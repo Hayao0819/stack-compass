@@ -38,4 +38,4 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 ARG DB_FILE_NAME
 
-CMD ["/app/scripts/start-container.sh"]
+CMD ["/app/scripts/start.sh"]
