@@ -9,20 +9,17 @@ WORKDIR /app
 COPY ./scripts /app/scripts
 # # hadolint ignore=DL3018
 RUN apk add --no-cache libc6-compat && /app/scripts/install-litestream.sh
-# RUN /app/scripts/install-litestream.sh
 
 FROM base AS deps
+WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 
 FROM deps AS builder
+WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-ARG DB_FILE_NAME
-COPY ./litestream.yml /etc/litestream.yml
-# RUN /app/scripts/setup-litestream.sh
-# RUN npm run migrate && npm run build
-RUN /app/scripts/build-container.sh
+RUN npm run migrate && npm run build
 
 FROM base AS prod
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
@@ -39,5 +36,4 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 ARG DB_FILE_NAME
 
-# ENTRYPOINT ["/app/scripts/start-container.sh"]
 CMD ["/app/scripts/start-container.sh"]
