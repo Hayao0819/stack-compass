@@ -10,9 +10,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Create litestream config
+        env:
+          SAKURA_STORAGE_BUCKET_NAME: ${{ vars.SAKURA_STORAGE_BUCKET_NAME }}
+          SAKURA_STORAGE_KEYID: ${{ secrets.SAKURA_STORAGE_KEYID }}
+          SAKURA_STORAGE_SECRET: ${{ secrets.SAKURA_STORAGE_SECRET }}
+          APP_NAME: stack-compass
+          DB_FILE_NAME: /app/db/app.db
+        run: ./scripts/common-litestream-config.sh > ./litestream.yml
+
       - name: Deploy to AppRun
         id: deploy
-        uses: rito528/sacloud-apprun-action@v6
+        uses: rito528/sacloud-apprun-action@v7
         with:
           use-repository-dockerfile: true
           app-dir: .
@@ -25,6 +34,6 @@ jobs:
           auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
           auth-github-secret: ${{ secrets.AUTH_GITHUB_SECRET }}
           auth-secret: ${{ secrets.AUTH_SECRET }}
-          db-file-name: ./db/app.db
-          database-url: "file:./db/app.db"
+          db-file-name: "/app/db/app.db"
+          database-url: "/app/db/app.db"
           auth-url: "https://app-e75a0946-2227-47e9-a56f-f92cbb6f79a3.ingress.apprun.sakura.ne.jp/"

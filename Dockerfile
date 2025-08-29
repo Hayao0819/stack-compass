@@ -34,6 +34,7 @@ COPY --from=builder /app/.next/standalone .
 COPY --from=builder /app/db ./db
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 ARG DB_FILE_NAME
 
