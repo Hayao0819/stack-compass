@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy to AppRun
         id: deploy
-        uses: rito528/sacloud-apprun-action@v7
+        uses: rito528/sacloud-apprun-action@v8
         with:
           use-repository-dockerfile: true
           app-dir: .
@@ -30,6 +30,9 @@ jobs:
           container-registry: ${{ vars.CONTAINER_REGISTRY_URL }}
           container-registry-user: ${{ vars.CONTAINER_REGISTRY_USERNAME }}
           container-registry-password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+          object-storage-bucket: ${{ vars.SAKURA_STORAGE_BUCKET_NAME }}
+          object-storage-access-key: ${{ secrets.SAKURA_STORAGE_KEYID }}
+          object-storage-secret-key: ${{ secrets.SAKURA_STORAGE_SECRET }}
           port: '3000'
           auth-github-id: ${{ secrets.AUTH_GITHUB_ID }}
           auth-github-secret: ${{ secrets.AUTH_GITHUB_SECRET }}
