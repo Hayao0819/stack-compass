@@ -7,8 +7,10 @@ FROM node:22-alpine AS base
 
 WORKDIR /app
 COPY ./scripts /app/scripts
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # # hadolint ignore=DL3018
-RUN apk add --no-cache libc6-compat && /app/scripts/install-litestream.sh
+RUN apk add --no-cache libc6-compat bash curl ca-certificates sqlite-libs && curl -L https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
+
 
 FROM base AS deps
 WORKDIR /app
@@ -22,7 +24,7 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN npm run migrate && npm run build
 
 FROM base AS prod
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME="0.0.0.0"
 EXPOSE 3000
 

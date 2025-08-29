@@ -12,7 +12,7 @@ if [ -z "${DB_FILE_NAME-""}" ]; then
 fi
 
 if [ ! -e /etc/litestream.yml ]; then
-  if ./scripts/common-litestream-config.sh >/etc/litestream.yml; then
+  if ./scripts/litestream-config.sh >/etc/litestream.yml; then
     echo "Litestream configuration file created at /etc/litestream.yml" >&2
   else
     echo "Failed to create Litestream configuration file" >&2
@@ -32,3 +32,5 @@ if [ ! -e "$DB_FILE_NAME" ]; then
   fi
 fi
 sync
+
+exec litestream replicate -config /etc/litestream.yml -exec "node server.js"
