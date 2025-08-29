@@ -2,13 +2,12 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { repositories } from "@/db/schema";
 import { db } from "@/index";
 
 export const dynamic = "force-dynamic";
 
 export default async function RepositoriesPage() {
-  const repositoriesData = await db.select().from(repositories);
+  const repositoriesData = await db.query.repositories.findMany();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
